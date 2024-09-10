@@ -1,13 +1,52 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: "BreezeSans-Bold";
+  src: url("./assets/BreezeSans/BreezeSans-Bold.ttf") format("truetype");
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@font-face {
+  font-family: "BreezeSans-Light";
+  src: url("./assets/BreezeSans/BreezeSans-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "BreezeSans-Medium";
+  src: url("./assets/BreezeSans/BreezeSans-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "BreezeSans-Regular";
+  src: url("./assets/BreezeSans/BreezeSans-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "BreezeSans-Thin";
+  src: url("./assets/BreezeSans/BreezeSans-Thin.ttf") format("truetype");
+}
+
+
+@font-face {
+  font-family: "SamsungSharpSans-Regular";
+  src: url("./assets/SamsungSans/SamsungSharpSans-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "SamsungSharpSans-Medium";
+  src: url("./assets/SamsungSans/SamsungSharpSans-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "SamsungSharpSans-Bold";
+  src: url("./assets/SamsungSans/SamsungSharpSans-Bold.otf") format("opentype");
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-size: 10px;
+}
+
+body {
+  font-family: "BreezeSans-Regular";
 }
