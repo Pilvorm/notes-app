@@ -33,7 +33,7 @@ p {
   background-color: #e4ef8f;
 }
 
-.action-btn, nav .new-note-btn {
+.action-btn, .card-bottom .note-options, nav .new-note-btn {
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -46,7 +46,7 @@ p {
   border: 1px solid transparent;
   transition: all 0.125s ease-in;
 }
-.action-btn:hover, nav .new-note-btn:hover {
+.action-btn:hover, .card-bottom .note-options:hover, nav .new-note-btn:hover {
   color: black;
   background-color: transparent;
   border: 1px solid black;
@@ -57,6 +57,36 @@ p {
 .dropdown-toggle-hide-arrow > .dropdown-toggle::before,
 .dropdown-toggle-hide-arrow > .dropdown-toggle::after {
   display: none;
+}
+
+.dropdown-menu, .card-bottom .note-options .note-menu, main .sort-function .sort-menu {
+  position: absolute;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 12px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: none;
+  border-radius: 16px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px -3px, rgba(0, 0, 0, 0.05) 0px 4px 4px -2px;
+  z-index: 1;
+}
+.dropdown-menu button, .card-bottom .note-options .note-menu button, main .sort-function .sort-menu button {
+  padding: 0 28px;
+  display: flex;
+  gap: 16px;
+  color: black;
+  font-size: 1.6rem;
+  text-align: left;
+  background-color: white;
+  border: none;
+  transition: all 0.075s linear;
+}
+.dropdown-menu button:hover, .card-bottom .note-options .note-menu button:hover, main .sort-function .sort-menu button:hover {
+  color: #fe9b72;
+  transition: all 0.075s linear;
 }
 
 nav {
@@ -136,40 +166,12 @@ main .sort-function {
   gap: 8px;
   font-family: "BreezeSans-Light";
 }
-main .sort-function .sort-options {
-  border: none;
-}
-main .sort-function .dropdown-menu {
-  position: absolute;
+main .sort-function .sort-menu {
   top: 45px;
   right: 0px;
-  width: -moz-max-content;
-  width: max-content;
   min-width: 195px;
-  padding: 12px 0px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border: none;
-  border-radius: 16px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px -3px, rgba(0, 0, 0, 0.05) 0px 4px 4px -2px;
 }
-main .sort-function .dropdown-menu button {
-  padding: 0 28px;
-  display: flex;
-  gap: 16px;
-  color: black;
-  font-size: 1.6rem;
-  text-align: left;
-  background-color: transparent;
-  border: none;
-  transition: all 0.075s linear;
-}
-main .sort-function .dropdown-menu button:hover {
-  color: #fe9b72;
-  transition: all 0.075s linear;
-}
-main .sort-function .dropdown-menu .selected {
+main .sort-function .sort-menu .selected {
   color: #fe9b72 !important;
 }
 main .sort-function p {
@@ -212,7 +214,8 @@ main .all-notes {
   font-family: "BreezeSans-Medium";
   transition: all 0.225s ease-in-out;
 }
-.card-body p, .card-body .card-title-input {
+.card-body p,
+.card-body .card-title-input {
   font-size: 1.6rem;
   -webkit-user-select: none !important;
      -moz-user-select: none !important;
@@ -235,9 +238,18 @@ main .all-notes {
 }
 
 .card-bottom {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
   font-family: "BreezeSans-Light";
+}
+.card-bottom .note-options {
+  position: relative;
+}
+.card-bottom .note-options .note-menu {
+  top: 0px;
+  left: 50px;
+  min-width: 125px;
 }/*# sourceMappingURL=App.css.map */

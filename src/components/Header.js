@@ -9,6 +9,8 @@ const sortValues = ["Title", "Date Created", "Date Modified"];
 const Header = ({ sortValue, setSortValue, sortDirection, setSortDirection }) => {
   const [dropdown, setDropdown] = useState(false);
 
+  console.log("HEADER RENDER");
+
   const changeSortDirection = () => {
     setSortDirection(
       sortDirection === "descending" ? "ascending" : "descending"
@@ -28,14 +30,14 @@ const Header = ({ sortValue, setSortValue, sortDirection, setSortDirection }) =>
 
   return (
     <div className="header">
-      <h1>Notes</h1>
+      <h1>All Notes</h1>
       <div className="sort-function" ref={wrapperRef}>
         <BsSortDown size={22} />
         <p onClick={() => setDropdown(!dropdown)}>{sortValue} |</p>
         <AnimatePresence>
           {dropdown && (
             <motion.div
-              className="dropdown-menu"
+              className="sort-menu"
               variants={visibility}
               initial="initial"
               animate="animate"

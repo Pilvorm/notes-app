@@ -3,25 +3,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { MdModeEdit } from "react-icons/md";
 import moment from "moment";
 import { motion, AnimatePresence } from "framer-motion";
-import {sortData } from "../helpers/noteHelper";
-import { editNote } from "../redux/actions";
+import { sortData } from "../helpers/noteHelper";
+import { editNote, deleteNote } from "../redux/actions";
+import { useClickOutside } from "../helpers/noteHelper";
 
-const sortValues = ["Title", "Date Created", "Date Modified"];
-
-const Notes = ({ sortValue, sortDirection }) => {
+const Notes = ({ sortValue, sortDirection, searchQuery }) => {
   const dispatch = useDispatch();
   const notes = useSelector((state) => state.note);
-  const [noteKey, setNoteKey] = useState(Object.keys(notes));
+  const noteKey = sortData(notes, sortValue, sortDirection, searchQuery);
 
-  useEffect(() => {
-    const sorted = sortData(notes, sortValue, sortDirection);
-    setNoteKey(sorted);
-  }, [notes, sortValue, sortDirection]);
-
-  console.log("Render");
-  console.log("======");
+  console.log("NOTE RENDER");
 
   const [editingTitle, setEditingTitle] = useState(null);
+  const [dropdown, setDropdown] = useState(null);
 
   const editNoteTitle = (key, newTitle) => {
     dispatch(
@@ -35,10 +29,20 @@ const Notes = ({ sortValue, sortDirection }) => {
   };
 
   const newNoteAnimation = {
-    initial: { opacity: 0, translateX: "-10px" },
-    animate: { opacity: 1, translateX: "0px" },
-    exit: { opacity: 0, translateX: "-10px" },
+    initial: { opacity: 0, scale: 0.95 },
+    animate: { opacity: 1, scale: 1 },
   };
+
+  const visibility = {
+    initial: { opacity: 0, translateY: "-10px" },
+    animate: { opacity: 1, translateY: "0px" },
+    exit: { opacity: 0, translateY: "-10px" },
+  };
+
+  const wrapperRef = useRef("menu");
+  useClickOutside(wrapperRef, () => {
+    setDropdown(false);
+  });
 
   return (
     <div className="note-cards">
@@ -48,7 +52,6 @@ const Notes = ({ sortValue, sortDirection }) => {
             variants={newNoteAnimation}
             initial="initial"
             animate="animate"
-            exit="exit"
             key={key}
             className="card"
           >
@@ -58,7 +61,21 @@ const Notes = ({ sortValue, sortDirection }) => {
                   className="card-title-input"
                   autoFocus
                   defaultValue={notes[key].title}
-                  onBlur={(e) => editNoteTitle(key, e.target.value)}
+                  maxLength={50}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      if (e.target.value !== notes[key].title) {
+                        editNoteTitle(key, e.target.value);
+                      }
+                    }
+                  }}
+                  onBlur={(e) => {
+                    if (e.target.value !== notes[key].title) {
+                      editNoteTitle(key, e.target.value);
+                    }
+                    setEditingTitle(null);
+                  }}
                 />
               ) : (
                 <p
@@ -70,8 +87,31 @@ const Notes = ({ sortValue, sortDirection }) => {
               )}
               <div className="card-bottom">
                 <p>{moment(notes[key].dateCreated).format("MMM DD, YYYY")}</p>
-                <div className="action-btn">
+                <div
+                  className="note-options"
+                  ref={wrapperRef}
+                  onClick={() => setDropdown(key)}
+                >
                   <MdModeEdit className="icon" size={18} />
+                  <AnimatePresence>
+                    {dropdown == key && (
+                      <motion.div
+                        className="note-menu"
+                        variants={visibility}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                      >
+                        <button
+                          onClick={() => {
+                            dispatch(deleteNote(key));
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>

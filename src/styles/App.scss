@@ -63,6 +63,38 @@ p {
   }
 }
 
+.dropdown-menu {
+  position: absolute;
+  width: max-content;
+  padding: 12px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: none;
+  border-radius: 16px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 4px -2px;
+  z-index: 1;
+
+  button {
+    padding: 0 28px;
+    display: flex;
+    gap: 16px;
+    color: black;
+    font-size: 1.6rem;
+    text-align: left;
+    background-color: white;
+    border: none;
+    transition: all 0.075s linear;
+
+    &:hover {
+      color: $peach;
+      transition: all 0.075s linear;
+    }
+  }
+}
+
 nav {
   display: block;
   position: fixed;
@@ -149,41 +181,12 @@ main {
     align-items: center;
     gap: 8px;
     font-family: "BreezeSans-Light";
-    
-    .sort-options {
-      border: none;
-    }
 
-    .dropdown-menu {
-      position: absolute;
+    .sort-menu {
+      @extend .dropdown-menu;
       top: 45px;
       right: 0px;
-      width: max-content;
       min-width: 195px;
-      padding: 12px 0px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      border: none;
-      border-radius: 16px;
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px -3px, rgba(0, 0, 0, 0.05) 0px 4px 4px -2px;
-
-      button {
-        padding: 0 28px;
-        display: flex;
-        gap: 16px;
-        color: black;
-        font-size: 1.6rem;
-        text-align: left;
-        background-color: transparent;
-        border: none;
-        transition: all 0.075s linear;
-        
-        &:hover {
-          color: $peach;
-          transition: all 0.075s linear;
-        }
-      }
 
       .selected {
         color: $peach !important;
@@ -195,7 +198,7 @@ main {
       cursor: pointer;
       user-select: none;
     }
-    
+
     .sort-direction {
       color: $text-gray;
       cursor: pointer;
@@ -232,13 +235,15 @@ main {
   font-family: "BreezeSans-Medium";
   transition: all 0.225s ease-in-out;
 
-  p, .card-title-input {
+  p,
+  .card-title-input {
     font-size: 1.6rem;
     user-select: none !important;
   }
 
   &:hover {
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+      rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
     transition: all 0.225s ease-in-out;
   }
 
@@ -249,18 +254,30 @@ main {
     background: transparent;
     resize: none;
     height: 60%;
-    
+
     &:focus {
       outline: none;
     }
   }
-
 }
 
 .card-bottom {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
   font-family: "BreezeSans-Light";
+
+  .note-options {
+    @extend .action-btn;
+    position: relative;
+
+    .note-menu {
+      @extend .dropdown-menu;
+      top: 0px;
+      left: 50px;
+      min-width: 125px;
+    }
+  }
 }
