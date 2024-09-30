@@ -1,44 +1,48 @@
-import "./styles/App.css";
-import Sidebar from "./components/Sidebar";
-import Notes from "./components/Notes";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { IoSearchOutline } from "react-icons/io5";
-import Header from "./components/Header";
 import { useState } from "react";
+import "./styles/App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Sidebar from "./components/Sidebar";
+import Searchbar from "./components/Searchbar";
+import Header from "./components/Header";
+import Notes from "./components/Notes";
+import { Outlet, useParams } from "react-router-dom";
 
 function App() {
-  const [sortValue, setSortValue] = useState("Date Modified");
+  const [sortValue, setSortValue] = useState("Date modified");
   const [sortDirection, setSortDirection] = useState("descending");
   const [searchQuery, setSearchQuery] = useState("");
+  // const [key, setKey] = useState(null);
 
-  console.log("APP RENDER");
+  const { noteID } = useParams();
 
   return (
     <div className="App">
       <Sidebar />
       <main>
-        <label className="mt-5 d-flex align-items-center">
-          <IoSearchOutline size={22} />
-          <input
-            name="searchNote"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </label>
-        <div className="all-notes">
-          <Header
-            sortValue={sortValue}
-            setSortValue={setSortValue}
-            sortDirection={sortDirection}
-            setSortDirection={setSortDirection}
-          />
-          <Notes
-            searchQuery={searchQuery}
-            sortValue={sortValue}
-            sortDirection={sortDirection}
-          />
-        </div>
+        {!noteID ? (
+          <>
+            <Searchbar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+            <div className="all-notes">
+              <Header
+                title="All notes"
+                sortValue={sortValue}
+                setSortValue={setSortValue}
+                sortDirection={sortDirection}
+                setSortDirection={setSortDirection}
+              />
+              <Notes
+                searchQuery={searchQuery}
+                sortValue={sortValue}
+                sortDirection={sortDirection}
+              />
+            </div>
+          </>
+        ) : (
+          <Outlet />
+        )}
       </main>
     </div>
   );

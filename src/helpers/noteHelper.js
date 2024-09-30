@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+export const colors = ["orange", "peach", "violet", "cyan", "lime"];
+
 export const useClickOutside = (ref, onClickOutside) => {
   useEffect(() => {
     function handleClickOutside(event) {
@@ -7,9 +9,9 @@ export const useClickOutside = (ref, onClickOutside) => {
         onClickOutside();
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside, { capture: true });
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside, { capture: true });
     };
   }, [ref, onClickOutside]);
 };
@@ -33,9 +35,9 @@ export const sortData = (notes, sortValue, sortDirection, query) => {
         ? -1
         : 0
     );
-  } else if (sortValue === "Date Created") {
+  } else if (sortValue === "Date created") {
     result = Object.keys(notes).reverse();
-  } else if (sortValue === "Date Modified") {
+  } else if (sortValue === "Date modified") {
     result = Object.keys(notes).sort(
       (a, b) =>
         new Date(notes[b].dateModified) - new Date(notes[a].dateModified)

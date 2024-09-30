@@ -33,7 +33,7 @@ p {
   background-color: #e4ef8f;
 }
 
-.action-btn, .card-bottom .note-options, nav .new-note-btn {
+.action-btn, .card-bottom .note-options, nav .sidebar-btn {
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -46,7 +46,7 @@ p {
   border: 1px solid transparent;
   transition: all 0.125s ease-in;
 }
-.action-btn:hover, .card-bottom .note-options:hover, nav .new-note-btn:hover {
+.action-btn:hover, .card-bottom .note-options:hover, nav .sidebar-btn:hover {
   color: black;
   background-color: transparent;
   border: 1px solid black;
@@ -59,7 +59,8 @@ p {
   display: none;
 }
 
-.dropdown-menu, .card-bottom .note-options .note-menu, main .sort-function .sort-menu {
+.dropdown-menu, .card-bottom .note-options .note-menu, main .header-settings .settings-menu {
+  pointer-events: auto;
   position: absolute;
   width: -moz-max-content;
   width: max-content;
@@ -71,9 +72,9 @@ p {
   border-radius: 16px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px -3px, rgba(0, 0, 0, 0.05) 0px 4px 4px -2px;
-  z-index: 1;
+  z-index: 99;
 }
-.dropdown-menu button, .card-bottom .note-options .note-menu button, main .sort-function .sort-menu button {
+.dropdown-menu button:not(.color-dot), .card-bottom .note-options .note-menu button:not(.color-dot), main .header-settings .settings-menu button:not(.color-dot) {
   padding: 0 28px;
   display: flex;
   gap: 16px;
@@ -84,13 +85,23 @@ p {
   border: none;
   transition: all 0.075s linear;
 }
-.dropdown-menu button:hover, .card-bottom .note-options .note-menu button:hover, main .sort-function .sort-menu button:hover {
+.dropdown-menu button:not(.color-dot):hover, .card-bottom .note-options .note-menu button:not(.color-dot):hover, main .header-settings .settings-menu button:not(.color-dot):hover {
   color: #fe9b72;
   transition: all 0.075s linear;
 }
 
+.color-dot {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+}
+
 nav {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: fixed;
   bottom: 0;
   top: 0;
@@ -103,15 +114,18 @@ nav {
 nav p {
   height: -moz-fit-content;
   height: fit-content;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-family: "BreezeSans-Medium";
 }
-nav .new-note {
-  margin-top: 55px;
-}
-nav .new-note-btn {
+nav .sidebar-btn {
   width: 45px;
   height: 45px;
+}
+nav .home-btn {
+  margin-top: 55px;
+}
+nav .new-note {
+  margin-top: 35px;
 }
 nav .new-note-colors {
   margin-top: 40px;
@@ -119,13 +133,6 @@ nav .new-note-colors {
   flex-direction: column;
   align-items: center;
   gap: 24px;
-}
-nav .color-dot {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border: none;
-  border-radius: 50%;
 }
 
 main {
@@ -143,11 +150,14 @@ main label input {
   height: 30px;
   padding: 0;
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 2rem;
   border: none;
 }
 main label input:focus {
   outline: none;
+}
+main .all-notes {
+  margin-top: 55px;
 }
 main .header {
   display: flex;
@@ -156,9 +166,9 @@ main .header {
 }
 main h1 {
   font-family: "BreezeSans-Medium";
-  font-size: 4rem;
+  font-size: 3.6rem;
 }
-main .sort-function {
+main .header-settings {
   color: #a1a1a1;
   position: relative;
   display: flex;
@@ -166,35 +176,33 @@ main .sort-function {
   gap: 8px;
   font-family: "BreezeSans-Light";
 }
-main .sort-function .sort-menu {
+main .header-settings .settings-menu {
   top: 45px;
   right: 0px;
   min-width: 195px;
 }
-main .sort-function .sort-menu .selected {
+main .header-settings .settings-menu .selected {
   color: #fe9b72 !important;
 }
-main .sort-function p {
+main .header-settings p {
   font-size: 1.6rem;
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
 }
-main .sort-function .sort-direction {
+main .header-settings .sort-direction {
   color: #a1a1a1;
   cursor: pointer;
   border: none;
   background-color: transparent;
-}
-main .all-notes {
-  margin-top: 55px;
 }
 
 .note-cards {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
+  padding: 0;
   margin-top: 50px;
   margin-bottom: 50px;
 }
@@ -212,7 +220,7 @@ main .all-notes {
   padding: 28px 18px !important;
   border-radius: 16px;
   font-family: "BreezeSans-Medium";
-  transition: all 0.225s ease-in-out;
+  transition: box-shadow 0.225s ease-in-out, transform 0.125s ease-in;
 }
 .card-body p,
 .card-body .card-title-input {
@@ -223,7 +231,7 @@ main .all-notes {
 }
 .card-body:hover {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
-  transition: all 0.225s ease-in-out;
+  transition: box-shadow 0.225s ease-in-out, transform 0.125s ease-in;
 }
 .card-body .card-title-input {
   margin: 0;
@@ -231,7 +239,7 @@ main .all-notes {
   border: none;
   background: transparent;
   resize: none;
-  height: 60%;
+  max-height: 40%;
 }
 .card-body .card-title-input:focus {
   outline: none;
@@ -248,8 +256,55 @@ main .all-notes {
 .card-bottom .note-options {
   position: relative;
 }
+.card-bottom .note-options:has(.note-menu:hover) {
+  color: white;
+  background-color: black;
+}
 .card-bottom .note-options .note-menu {
   top: 0px;
   left: 50px;
   min-width: 125px;
+}
+.card-bottom .edit-colors {
+  display: flex;
+  gap: 12px;
+  padding: 12px 28px 0px 28px;
+  border-top: 1px solid #e3e9f3;
+}
+
+#empty-notes {
+  height: 60vh;
+  color: #a1a1a1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+}
+#empty-notes p {
+  font-size: 2.5rem;
+}
+
+#editor-modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+#editor-modal .modal-body {
+  background-color: white;
+  border-radius: 16px;
+  max-width: 580px;
+  min-height: 180px;
+}
+#editor-modal .modal-header {
+  padding: 16px 12px;
 }/*# sourceMappingURL=App.css.map */

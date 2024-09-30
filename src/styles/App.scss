@@ -7,6 +7,8 @@ $violet: #b693fd;
 $cyan: #00d4fe;
 $lime: #e4ef8f;
 
+$sidebar-width: 128px;
+
 ::placeholder {
   color: $text-gray;
 }
@@ -64,6 +66,7 @@ p {
 }
 
 .dropdown-menu {
+  pointer-events: auto;
   position: absolute;
   width: max-content;
   padding: 12px 0px;
@@ -75,9 +78,9 @@ p {
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px -3px,
     rgba(0, 0, 0, 0.05) 0px 4px 4px -2px;
-  z-index: 1;
+  z-index: 99;
 
-  button {
+  button:not(.color-dot) {
     padding: 0 28px;
     display: flex;
     gap: 16px;
@@ -95,31 +98,45 @@ p {
   }
 }
 
+.color-dot {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+}
+
 nav {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: fixed;
   bottom: 0;
   top: 0;
   left: 0;
   right: 0;
   height: 100%;
-  width: 128px;
+  width: $sidebar-width;
   border-right: 2px solid $line-gray;
 
   p {
     height: fit-content;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-family: "BreezeSans-Medium";
   }
 
-  .new-note {
-    margin-top: 55px;
-  }
-
-  .new-note-btn {
+  .sidebar-btn {
     @extend .action-btn;
     width: 45px;
     height: 45px;
+  }
+
+  .home-btn {
+    margin-top: 55px;
+  }
+
+  .new-note {
+    margin-top: 35px;
   }
 
   .new-note-colors {
@@ -129,18 +146,10 @@ nav {
     align-items: center;
     gap: 24px;
   }
-
-  .color-dot {
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    border: none;
-    border-radius: 50%;
-  }
 }
 
 main {
-  margin-left: calc(128px + 56px);
+  margin-left: calc($sidebar-width + 56px);
   margin-right: 56px;
 
   label {
@@ -154,13 +163,17 @@ main {
       height: 30px;
       padding: 0;
       margin: 0;
-      font-size: 1.8rem;
+      font-size: 2rem;
       border: none;
     }
 
     input:focus {
       outline: none;
     }
+  }
+
+  .all-notes {
+    margin-top: 55px;
   }
 
   .header {
@@ -171,10 +184,10 @@ main {
 
   h1 {
     font-family: "BreezeSans-Medium";
-    font-size: 4rem;
+    font-size: 3.6rem;
   }
 
-  .sort-function {
+  .header-settings {
     color: $text-gray;
     position: relative;
     display: flex;
@@ -182,7 +195,7 @@ main {
     gap: 8px;
     font-family: "BreezeSans-Light";
 
-    .sort-menu {
+    .settings-menu {
       @extend .dropdown-menu;
       top: 45px;
       right: 0px;
@@ -207,15 +220,16 @@ main {
     }
   }
 
-  .all-notes {
-    margin-top: 55px;
-  }
+  // .editor {
+  //   margin-top: 85px;
+  // }
 }
 
 .note-cards {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
+  padding: 0;
   margin-top: 50px;
   margin-bottom: 50px;
 }
@@ -233,7 +247,7 @@ main {
   padding: 28px 18px !important;
   border-radius: 16px;
   font-family: "BreezeSans-Medium";
-  transition: all 0.225s ease-in-out;
+  transition: box-shadow 0.225s ease-in-out, transform 0.125s ease-in;
 
   p,
   .card-title-input {
@@ -242,9 +256,10 @@ main {
   }
 
   &:hover {
+    // transform: scale(1.0125);
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
       rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
-    transition: all 0.225s ease-in-out;
+    transition: box-shadow 0.225s ease-in-out, transform 0.125s ease-in;
   }
 
   .card-title-input {
@@ -253,7 +268,7 @@ main {
     border: none;
     background: transparent;
     resize: none;
-    height: 60%;
+    max-height: 40%;
 
     &:focus {
       outline: none;
@@ -273,6 +288,11 @@ main {
     @extend .action-btn;
     position: relative;
 
+    &:has(.note-menu:hover) {
+      color: white;
+      background-color: black;
+    }
+
     .note-menu {
       @extend .dropdown-menu;
       top: 0px;
@@ -280,4 +300,56 @@ main {
       min-width: 125px;
     }
   }
+
+  .edit-colors {
+    display: flex;
+    gap: 12px;
+    padding: 12px 28px 0px 28px;
+    border-top: 1px solid $line-gray;
+  }
+
+  // .selected-color-outline {
+  //   outline: 1px solid black;
+  // }
+}
+
+#empty-notes {
+  height: 60vh;
+  color: $text-gray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+
+  p {
+    font-size: 2.5rem;
+  }
+}
+
+#editor-modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+
+  .modal-body  {
+    background-color: white;
+    border-radius: 16px;
+    max-width: 580px;
+    min-height: 180px;
+  }
+
+  .modal-header {
+    padding: 16px 12px;
+  }
+
 }
