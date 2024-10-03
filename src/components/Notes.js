@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { FaRegNoteSticky } from "react-icons/fa6";
@@ -7,17 +7,29 @@ import { motion, AnimatePresence } from "framer-motion";
 import { colors, useClickOutside, sortData } from "../helpers/noteHelper";
 import EditorPopup from "./EditorPopup";
 import { createNote, editNote, deleteNote } from "../redux/actions";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 const Notes = ({ sortValue, sortDirection, searchQuery }) => {
   const dispatch = useDispatch();
   const notes = useSelector((state) => state.note);
   const noteKey = sortData(notes, sortValue, sortDirection, searchQuery);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  let { noteID } = useParams();
+  const [selectedNote, setSelectedNote] = useState(null);
+
+  useEffect(() => {
+    const noteTimer = setTimeout(() => {
+      if(noteID) setSelectedNote(noteID);
+      else setSelectedNote(null);
+    }, 150);
+    return () => clearTimeout(noteTimer);
+  }, [location]);
+
   const [editingTitle, setEditingTitle] = useState(null);
   const [dropdown, setDropdown] = useState(null);
-  const [selectedNote, setSelectedNote] = useState(null);
-  const navigate = useNavigate();
+  
 
   const editNoteTitle = (key, newTitle) => {
     dispatch(
@@ -86,8 +98,10 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
               key={key}
               className="card"
               style={dropdown === key && { zIndex: "99" }}
-              // onClick={() => !editingTitle && navigate(`note/${key}`)}
-              onClick={() => setSelectedNote(key)}
+              onClick={() => {
+                setSelectedNote(key);
+                navigate(`/notes/${key}`);
+              }}
             >
               <div className={`card-body ${notes[key].color}`}>
                 {editingTitle === key ? (
@@ -96,6 +110,7 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
                     className="card-title-input"
                     defaultValue={notes[key].title}
                     maxLength={50}
+                    onClick={(e) => e.stopPropagation()}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
@@ -189,7 +204,12 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
         </AnimatePresence>
       </ul>
       <AnimatePresence>
-        {selectedNote && <EditorPopup layoutId={selectedNote} />}
+        {selectedNote && (
+          <EditorPopup
+            layoutId={selectedNote}
+            setSelectedNote={setSelectedNote}
+          />
+        )}
       </AnimatePresence>
     </>
   ) : (

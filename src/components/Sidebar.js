@@ -6,11 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { colors } from "../helpers/noteHelper";
 import { useParams, useNavigate } from "react-router-dom";
 
-const Sidebar = ({ }) => {
+const Sidebar = ({}) => {
   const [newNote, setNewNote] = useState(false);
 
   const dispatch = useDispatch();
-  const { noteID } = useParams();
   const navigate = useNavigate();
 
   const createNewNote = (color) => {
@@ -38,45 +37,43 @@ const Sidebar = ({ }) => {
       <motion.button
         whileTap={{ scale: 0.85 }}
         className="sidebar-btn home-btn"
-        onClick={() => noteID && navigate("/")}
+        onClick={() => navigate("/")}
       >
         <FiHome size={24} />
       </motion.button>
-      {!noteID && (
-        <div className="new-note">
-          <motion.button
-            whileTap={{ scale: 0.85 }}
-            className="sidebar-btn"
-            onClick={() => setNewNote(!newNote)}
-          >
-            <FiPlus size={24} />
-          </motion.button>
-          <AnimatePresence>
-            {newNote && (
-              <motion.div
-                variants={visibilityAnimation}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="new-note-colors"
-              >
-                {colors.map((color, index) => (
-                  <motion.button
-                    variants={visibilityAnimation}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    transition={{ delay: (index + 1) / 30 }}
-                    key={color}
-                    className={`color-dot ${color}`}
-                    onClick={() => createNewNote(color)}
-                  ></motion.button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      )}
+      <div className="new-note">
+        <motion.button
+          whileTap={{ scale: 0.85 }}
+          className="sidebar-btn"
+          onClick={() => setNewNote(!newNote)}
+        >
+          <FiPlus size={24} />
+        </motion.button>
+        <AnimatePresence>
+          {newNote && (
+            <motion.div
+              variants={visibilityAnimation}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="new-note-colors"
+            >
+              {colors.map((color, index) => (
+                <motion.button
+                  variants={visibilityAnimation}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={{ delay: (index + 1) / 30 }}
+                  key={color}
+                  className={`color-dot ${color}`}
+                  onClick={() => createNewNote(color)}
+                ></motion.button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </nav>
   );
 };

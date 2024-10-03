@@ -282,7 +282,7 @@ main .header-settings .sort-direction {
   gap: 18px;
 }
 #empty-notes p {
-  font-size: 2.5rem;
+  font-size: 2.4rem;
 }
 
 #editor-modal {
@@ -297,14 +297,26 @@ main .header-settings .sort-direction {
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  background-color: rgba(32, 33, 36, 0.6); /* Black w/ opacity */
+}
+#editor-modal .modal-header {
+  padding: 16px 12px;
 }
 #editor-modal .modal-body {
+  padding: 0px 12px;
   background-color: white;
   border-radius: 16px;
   max-width: 580px;
   min-height: 180px;
 }
-#editor-modal .modal-header {
-  padding: 16px 12px;
+#editor-modal #note-title-editor, #editor-modal #note-content-editor {
+  width: 100%;
+  resize: none;
+  background-color: transparent;
+}
+#editor-modal #note-title-editor {
+  font-size: 2.2rem;
+  height: -moz-fit-content;
+  height: fit-content;
+  font-family: "BreezeSans-Medium";
 }/*# sourceMappingURL=App.css.map */
