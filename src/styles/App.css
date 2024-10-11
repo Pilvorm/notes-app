@@ -207,10 +207,16 @@ main .header-settings .sort-direction {
   margin-bottom: 50px;
 }
 
+.selected-note {
+  opacity: 0 !important;
+  transition: all 0.1s ease-in;
+}
+
 .card {
   width: 245px;
   height: 245px !important;
   border: none !important;
+  border-radius: 16px !important;
 }
 
 .card-body {
@@ -264,6 +270,7 @@ main .header-settings .sort-direction {
   top: 0px;
   left: 50px;
   min-width: 125px;
+  z-index: 99;
 }
 .card-bottom .edit-colors {
   display: flex;
@@ -299,24 +306,31 @@ main .header-settings .sort-direction {
   background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(32, 33, 36, 0.6); /* Black w/ opacity */
 }
-#editor-modal .modal-header {
-  padding: 16px 12px;
-}
-#editor-modal .modal-body {
-  padding: 0px 12px;
+#editor-modal .modal-card {
   background-color: white;
   border-radius: 16px;
-  max-width: 580px;
+  min-width: 580px;
   min-height: 180px;
+}
+#editor-modal .modal-header {
+  padding: 24px 24px;
+}
+#editor-modal .modal-body {
+  padding: 0 24px;
 }
 #editor-modal #note-title-editor, #editor-modal #note-content-editor {
   width: 100%;
   resize: none;
   background-color: transparent;
 }
+#editor-modal #note-title-editor:focus, #editor-modal #note-content-editor:focus {
+  outline: none;
+}
 #editor-modal #note-title-editor {
   font-size: 2.2rem;
-  height: -moz-fit-content;
-  height: fit-content;
   font-family: "BreezeSans-Medium";
+}
+#editor-modal #note-content-editor {
+  font-size: 1.6rem;
+  font-family: "BreezeSans-Regular";
 }/*# sourceMappingURL=App.css.map */

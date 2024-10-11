@@ -9,38 +9,9 @@ import EditorPopup from "./EditorPopup";
 import { createNote, editNote, deleteNote } from "../redux/actions";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-const Notes = ({ sortValue, sortDirection, searchQuery }) => {
+const NoteOptions = ({ note, noteKey }) => {
   const dispatch = useDispatch();
-  const notes = useSelector((state) => state.note);
-  const noteKey = sortData(notes, sortValue, sortDirection, searchQuery);
-
-  const navigate = useNavigate();
-  const location = useLocation();
-  let { noteID } = useParams();
-  const [selectedNote, setSelectedNote] = useState(null);
-
-  useEffect(() => {
-    const noteTimer = setTimeout(() => {
-      if(noteID) setSelectedNote(noteID);
-      else setSelectedNote(null);
-    }, 150);
-    return () => clearTimeout(noteTimer);
-  }, [location]);
-
-  const [editingTitle, setEditingTitle] = useState(null);
-  const [dropdown, setDropdown] = useState(null);
-  
-
-  const editNoteTitle = (key, newTitle) => {
-    dispatch(
-      editNote({
-        key,
-        title: newTitle || "Title",
-        dateModified: new Date(),
-      })
-    );
-    setEditingTitle(null);
-  };
+  const [dropdown, setDropdown] = useState(false);
 
   const editNoteColor = (key, color) => {
     dispatch(
@@ -50,7 +21,6 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
         dateModified: new Date(),
       })
     );
-    setEditingTitle(null);
   };
 
   const copyNote = (title, content, color) => {
@@ -66,12 +36,6 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
     );
   };
 
-  const newNoteAnimation = {
-    initial: { opacity: 0, scale: 0.95 },
-    animate: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0.95 },
-  };
-
   const visibilityAnimation = {
     initial: { opacity: 0, translateY: "-10px" },
     animate: { opacity: 1, translateY: "0px" },
@@ -80,8 +44,87 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
 
   const wrapperRef = useRef(null);
   useClickOutside(wrapperRef, () => {
-    setDropdown(null);
+    setDropdown(false);
   });
+
+  return (
+    <div
+      className="note-options"
+      ref={wrapperRef}
+      onClick={(e) => {
+        e.stopPropagation();
+        setDropdown(!dropdown);
+      }}
+    >
+      <IoEllipsisVertical className="icon" size={18} />
+      <AnimatePresence>
+        {dropdown && (
+          <motion.div
+            className="note-menu"
+            variants={visibilityAnimation}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <button
+              onClick={() => {
+                dispatch(deleteNote(noteKey));
+              }}
+            >
+              Delete note
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setDropdown(false);
+                copyNote(note.title, note.content, note.color);
+              }}
+            >
+              Make a copy
+            </button>
+            <div className="edit-colors">
+              {colors.map((color, index) => (
+                <button
+                  key={color}
+                  className={`color-dot ${color} ${
+                    color === note.color && "selected-color-outline"
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    editNoteColor(noteKey, color);
+                  }}
+                ></button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const Notes = ({ sortValue, sortDirection, searchQuery }) => {
+  const notes = useSelector((state) => state.note);
+  const noteKey = sortData(notes, sortValue, sortDirection, searchQuery);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  let { noteID } = useParams();
+  const [selectedNote, setSelectedNote] = useState(null);
+
+  useEffect(() => {
+    const noteTimer = setTimeout(() => {
+      if (noteID) setSelectedNote(noteID);
+      else setSelectedNote(null);
+    }, 150);
+    return () => clearTimeout(noteTimer);
+  }, [location]);
+
+  const newNoteAnimation = {
+    initial: { opacity: 0, scale: 0.95 },
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0.95 },
+  };
 
   return noteKey.length ? (
     <>
@@ -96,107 +139,19 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
               animate="animate"
               exit="exit"
               key={key}
-              className="card"
-              style={dropdown === key && { zIndex: "99" }}
+              className={`card ${selectedNote === key ? "selected-note" : ""}`}
               onClick={() => {
                 setSelectedNote(key);
                 navigate(`/notes/${key}`);
               }}
             >
               <div className={`card-body ${notes[key].color}`}>
-                {editingTitle === key ? (
-                  <textarea
-                    autoFocus
-                    className="card-title-input"
-                    defaultValue={notes[key].title}
-                    maxLength={50}
-                    onClick={(e) => e.stopPropagation()}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        if (e.target.value !== notes[key].title) {
-                          editNoteTitle(key, e.target.value);
-                        }
-                      }
-                    }}
-                    onBlur={(e) => {
-                      if (e.target.value !== notes[key].title) {
-                        editNoteTitle(key, e.target.value);
-                      }
-                      setEditingTitle(null);
-                    }}
-                  />
-                ) : (
-                  <p
-                    className="card-text"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setEditingTitle(key);
-                    }}
-                  >
-                    {notes[key].title}
-                  </p>
-                )}
+                <p className="card-text" layout="position">
+                  {notes[key].title}
+                </p>
                 <div className="card-bottom">
                   <p>{moment(notes[key].dateCreated).format("MMM DD, YYYY")}</p>
-                  <div
-                    className="note-options"
-                    ref={wrapperRef}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (dropdown === null) setDropdown(key);
-                      else setDropdown(null);
-                    }}
-                  >
-                    <IoEllipsisVertical className="icon" size={18} />
-                    <AnimatePresence>
-                      {dropdown == key && (
-                        <motion.div
-                          className="note-menu"
-                          variants={visibilityAnimation}
-                          initial="initial"
-                          animate="animate"
-                          exit="exit"
-                        >
-                          <button
-                            onClick={() => {
-                              dispatch(deleteNote(key));
-                            }}
-                          >
-                            Delete note
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setDropdown(null);
-                              copyNote(
-                                notes[key].title,
-                                notes[key].content,
-                                notes[key].color
-                              );
-                            }}
-                          >
-                            Make a copy
-                          </button>
-                          <div className="edit-colors">
-                            {colors.map((color, index) => (
-                              <button
-                                key={color}
-                                className={`color-dot ${color} ${
-                                  color === notes[key].color &&
-                                  "selected-color-outline"
-                                }`}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  editNoteColor(key, color);
-                                }}
-                              ></button>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
+                  <NoteOptions note={notes[key]} noteKey={key} />
                 </div>
               </div>
             </motion.li>

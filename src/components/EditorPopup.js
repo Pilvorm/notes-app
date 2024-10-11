@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { IoEllipsisVertical } from "react-icons/io5";
 import moment from "moment";
 import { editNote, deleteNote } from "../redux/actions";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDebouncedCallback } from "use-debounce";
+import useAutosizeInput from "../helpers/autoSizeInput";
+import TextareaAutosize from "react-textarea-autosize";
 
 const EditorPopup = ({ layoutId, setSelectedNote }) => {
   const dispatch = useDispatch();
@@ -14,16 +18,24 @@ const EditorPopup = ({ layoutId, setSelectedNote }) => {
 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
+  const inputRef = useRef(null);
 
-  const editNoteTitle = (noteKey, newTitle) => {
+  // useAutosizeInput(inputRef, title);
+
+  const saveNote = () => {
     dispatch(
       editNote({
-        noteKey,
-        title: newTitle || "Title",
+        key: noteKey,
+        title: title || "Title",
+        content: content || "",
         dateModified: new Date(),
       })
     );
   };
+
+  const debounced = useDebouncedCallback(() => {
+    saveNote();
+  }, 1000);
 
   const modalAnimation = {
     initial: { opacity: 0 },
@@ -39,38 +51,47 @@ const EditorPopup = ({ layoutId, setSelectedNote }) => {
       exit="exit"
       id="editor-modal"
       onClick={() => {
+        saveNote();
         setSelectedNote(null);
         navigate("/");
       }}
     >
       <motion.div
         layoutId={layoutId}
-        className={`modal-body`}
+        className={`modal-card`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <textarea
+          <TextareaAutosize
             id="note-title-editor"
             layout="position"
+            ref={inputRef}
             defaultValue={note.title}
             maxLength={50}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                if (e.target.value !== note.title) {
-                  editNoteTitle(noteKey, e.target.value);
-                }
-              }
+            minRows={1}
+            maxRows={2}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              debounced();
             }}
-            // onBlur={(e) => {
-            //   if (e.target.value !== note.title) {
-            //     editNoteTitle(noteKey, e.target.value);
-            //   }
-            // }}
           />
         </div>
         <div className="modal-body">
-          {/* <textarea id="note-content-editor" defaultValue={note.content} /> */}
+          <TextareaAutosize
+            id="note-content-editor"
+            defaultValue={note.content}
+            minRows={1}
+            maxRows={16}
+            placeholder="Write something here"
+            onChange={(e) => {
+              setContent(e.target.value);
+              debounced();
+            }}
+          />
+        </div>
+        <div classname="modal-footer">
+          <IoEllipsisVertical className="icon" size={18} />
+          <p>Close</p>
         </div>
       </motion.div>
     </motion.div>
