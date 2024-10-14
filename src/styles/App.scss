@@ -6,12 +6,9 @@ $peach: #fe9b72;
 $violet: #b693fd;
 $cyan: #00d4fe;
 $lime: #e4ef8f;
+$yellow: #fecd00;
 
 $sidebar-width: 128px;
-
-::placeholder {
-  color: $text-gray;
-}
 
 h1,
 h2,
@@ -34,6 +31,28 @@ p {
 }
 .lime {
   background-color: $lime;
+}
+
+::placeholder {
+  color: $text-gray;
+}
+
+textarea::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar {
+	width: 14px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: $line-gray;
+	border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    border-radius: 0px;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%,
+	                   color-stop(.5, rgba(255, 255, 255, .2)),
+					   color-stop(.5, transparent), to(transparent));
 }
 
 .action-btn {
@@ -349,23 +368,48 @@ main {
   background-color: rgba(32, 33, 36, 0.6); /* Black w/ opacity */
 
   .modal-card  {
-    background-color: white;
+    // background-color: white;
     border-radius: 16px;
-    min-width: 580px;
+    min-width: 585px;
     min-height: 180px;
   }
 
   .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 24px 24px;
+    border-radius: 16px 16px 0 0;
+
+    svg {
+      // color: $yellow;
+      cursor: pointer;
+    }
   }
 
   .modal-body {
     padding: 0 24px;
   }
 
-  #note-title-editor, #note-content-editor {
+  .modal-footer {
+    background-color: white;
+    border-radius: 0 0 16px 16px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 32px;
+    padding: 24px 24px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 18px;
+
+    .close-btn {
+      border: none;
+      background-color: transparent;
+    }
+
+  }
+
+  textarea {
     width: 100%;
-    // border: none;
+    border: none;
     resize: none;
     background-color: transparent;
 

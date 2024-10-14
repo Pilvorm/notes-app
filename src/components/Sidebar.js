@@ -16,7 +16,7 @@ const Sidebar = ({}) => {
     dispatch(
       createNote({
         title: "Title",
-        content: "Content",
+        content: "",
         color,
         starred: false,
         dateCreated: new Date(),

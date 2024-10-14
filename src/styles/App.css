@@ -1,11 +1,3 @@
-::-moz-placeholder {
-  color: #a1a1a1;
-}
-
-::placeholder {
-  color: #a1a1a1;
-}
-
 h1,
 h2,
 h3,
@@ -31,6 +23,34 @@ p {
 
 .lime {
   background-color: #e4ef8f;
+}
+
+::-moz-placeholder {
+  color: #a1a1a1;
+}
+
+::placeholder {
+  color: #a1a1a1;
+}
+
+textarea::-moz-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+textarea::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #e3e9f3;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 0px;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0.5, rgba(255, 255, 255, 0.2)), color-stop(0.5, transparent), to(transparent));
 }
 
 .action-btn, .card-bottom .note-options, nav .sidebar-btn {
@@ -307,23 +327,43 @@ main .header-settings .sort-direction {
   background-color: rgba(32, 33, 36, 0.6); /* Black w/ opacity */
 }
 #editor-modal .modal-card {
-  background-color: white;
   border-radius: 16px;
-  min-width: 580px;
+  min-width: 585px;
   min-height: 180px;
 }
 #editor-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 24px 24px;
+  border-radius: 16px 16px 0 0;
+}
+#editor-modal .modal-header svg {
+  cursor: pointer;
 }
 #editor-modal .modal-body {
   padding: 0 24px;
 }
-#editor-modal #note-title-editor, #editor-modal #note-content-editor {
+#editor-modal .modal-footer {
+  background-color: white;
+  border-radius: 0 0 16px 16px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding: 24px 24px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 18px;
+}
+#editor-modal .modal-footer .close-btn {
+  border: none;
+  background-color: transparent;
+}
+#editor-modal textarea {
   width: 100%;
+  border: none;
   resize: none;
   background-color: transparent;
 }
-#editor-modal #note-title-editor:focus, #editor-modal #note-content-editor:focus {
+#editor-modal textarea:focus {
   outline: none;
 }
 #editor-modal #note-title-editor {
