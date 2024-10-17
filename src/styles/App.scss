@@ -42,17 +42,22 @@ textarea::placeholder {
 }
 
 ::-webkit-scrollbar {
-	width: 14px;
+  width: 14px;
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: $line-gray;
-	border: 4px solid rgba(0, 0, 0, 0);
-    background-clip: padding-box;
-    border-radius: 0px;
-	background-image: -webkit-gradient(linear, 0 0, 0 100%,
-	                   color-stop(.5, rgba(255, 255, 255, .2)),
-					   color-stop(.5, transparent), to(transparent));
+  background-color: $line-gray;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 0px;
+  background-image: -webkit-gradient(
+    linear,
+    0 0,
+    0 100%,
+    color-stop(0.5, rgba(255, 255, 255, 0.2)),
+    color-stop(0.5, transparent),
+    to(transparent)
+  );
 }
 
 .action-btn {
@@ -367,7 +372,7 @@ main {
   background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(32, 33, 36, 0.6); /* Black w/ opacity */
 
-  .modal-card  {
+  .modal-card {
     // background-color: white;
     border-radius: 16px;
     min-width: 585px;
@@ -418,6 +423,24 @@ main {
       align-items: center;
     }
 
+    .action {
+      position: relative;
+    }
+
+    .color-menu {
+      @extend .dropdown-menu;
+      top: 30px;
+      left: -20px;
+      min-width: 125px;
+      z-index: 99;
+
+      .edit-colors {
+        display: flex;
+        gap: 12px;
+        padding: 4px 12px;
+      }
+    }
+
     .close-btn {
       font-size: 1.4rem;
       border: none;
@@ -426,13 +449,12 @@ main {
       background-color: transparent;
       font-family: "BreezeSans-Medium";
       transition: all 0.075s ease-in;
-      
+
       &:hover {
         background-color: rgba(89, 89, 89, 0.1);
         transition: all 0.075s ease-in;
       }
     }
-
   }
 
   textarea {
@@ -442,7 +464,7 @@ main {
     background-color: transparent;
 
     &:focus {
-      outline: none
+      outline: none;
     }
   }
 
@@ -455,5 +477,4 @@ main {
     font-size: 1.6rem;
     font-family: "BreezeSans-Regular";
   }
-
 }

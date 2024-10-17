@@ -79,7 +79,7 @@ textarea::placeholder {
   display: none;
 }
 
-.dropdown-menu, .card-bottom .note-options .note-menu, main .header-settings .settings-menu {
+.dropdown-menu, #editor-modal .modal-footer .color-menu, .card-bottom .note-options .note-menu, main .header-settings .settings-menu {
   pointer-events: auto;
   position: absolute;
   width: -moz-max-content;
@@ -94,7 +94,7 @@ textarea::placeholder {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px -3px, rgba(0, 0, 0, 0.05) 0px 4px 4px -2px;
   z-index: 99;
 }
-.dropdown-menu button:not(.color-dot), .card-bottom .note-options .note-menu button:not(.color-dot), main .header-settings .settings-menu button:not(.color-dot) {
+.dropdown-menu button:not(.color-dot), #editor-modal .modal-footer .color-menu button:not(.color-dot), .card-bottom .note-options .note-menu button:not(.color-dot), main .header-settings .settings-menu button:not(.color-dot) {
   padding: 0 28px;
   display: flex;
   gap: 16px;
@@ -105,7 +105,7 @@ textarea::placeholder {
   border: none;
   transition: all 0.075s linear;
 }
-.dropdown-menu button:not(.color-dot):hover, .card-bottom .note-options .note-menu button:not(.color-dot):hover, main .header-settings .settings-menu button:not(.color-dot):hover {
+.dropdown-menu button:not(.color-dot):hover, #editor-modal .modal-footer .color-menu button:not(.color-dot):hover, .card-bottom .note-options .note-menu button:not(.color-dot):hover, main .header-settings .settings-menu button:not(.color-dot):hover {
   color: #fe9b72;
   transition: all 0.075s linear;
 }
@@ -367,6 +367,20 @@ main .header-settings .sort-direction {
   display: flex;
   gap: 28px;
   align-items: center;
+}
+#editor-modal .modal-footer .action {
+  position: relative;
+}
+#editor-modal .modal-footer .color-menu {
+  top: 30px;
+  left: -20px;
+  min-width: 125px;
+  z-index: 99;
+}
+#editor-modal .modal-footer .color-menu .edit-colors {
+  display: flex;
+  gap: 12px;
+  padding: 4px 12px;
 }
 #editor-modal .modal-footer .close-btn {
   font-size: 1.4rem;

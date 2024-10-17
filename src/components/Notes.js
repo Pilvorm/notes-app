@@ -104,6 +104,7 @@ const NoteOptions = ({ note, noteKey }) => {
 };
 
 const Notes = ({ sortValue, sortDirection, searchQuery }) => {
+  const dispatch = useDispatch();
   const notes = useSelector((state) => state.note);
   const noteKey = sortData(notes, sortValue, sortDirection, searchQuery);
 
@@ -111,13 +112,23 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
   const location = useLocation();
   let { noteID } = useParams();
   const [selectedNote, setSelectedNote] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   useEffect(() => {
+    const deleteTimer = setTimeout(() => {
+      if (deleteTarget) {
+        dispatch(deleteNote(deleteTarget));
+        setDeleteTarget(null);
+      }
+    }, 500);
     const noteTimer = setTimeout(() => {
       if (noteID) setSelectedNote(noteID);
       else setSelectedNote(null);
     }, 150);
-    return () => clearTimeout(noteTimer);
+    return () => {
+      clearTimeout(deleteTimer);
+      clearTimeout(noteTimer);
+    };
   }, [location]);
 
   const newNoteAnimation = {
@@ -163,6 +174,7 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
           <EditorPopup
             layoutId={selectedNote}
             setSelectedNote={setSelectedNote}
+            setDeleteTarget={setDeleteTarget}
           />
         )}
       </AnimatePresence>

@@ -4,14 +4,15 @@ import { IoEllipsisVertical, IoColorPaletteOutline } from "react-icons/io5";
 import { IoIosStarOutline, IoIosStar } from "react-icons/io";
 import { FiCopy, FiTrash } from "react-icons/fi";
 import moment from "moment";
-import { editNote, deleteNote } from "../redux/actions";
+import { createNote, editNote, deleteNote } from "../redux/actions";
+import { colors, useClickOutside } from "../helpers/noteHelper";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
 import useAutosizeInput from "../helpers/autoSizeInput";
 import TextareaAutosize from "react-textarea-autosize";
 
-const EditorPopup = ({ layoutId, setSelectedNote }) => {
+const EditorPopup = ({ layoutId, setSelectedNote, setDeleteTarget }) => {
   const dispatch = useDispatch();
   const notes = useSelector((state) => state.note);
   const note = notes[layoutId];
@@ -22,9 +23,8 @@ const EditorPopup = ({ layoutId, setSelectedNote }) => {
   const [content, setContent] = useState(note.content);
   const [starred, setStarred] = useState(note.starred);
   const [updated, setUpdated] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
   const inputRef = useRef(null);
-
-  // useAutosizeInput(inputRef, title);
 
   const saveNote = () => {
     dispatch(
@@ -33,6 +33,29 @@ const EditorPopup = ({ layoutId, setSelectedNote }) => {
         title: title || "Title",
         content: content || "",
         starred: starred,
+        dateModified: new Date(),
+      })
+    );
+  };
+
+  const copyNote = (title, content, color) => {
+    dispatch(
+      createNote({
+        title,
+        content,
+        color,
+        starred: false,
+        dateCreated: new Date(),
+        dateModified: new Date(),
+      })
+    );
+  };
+
+  const editNoteColor = (key, color) => {
+    dispatch(
+      editNote({
+        key,
+        color,
         dateModified: new Date(),
       })
     );
@@ -47,6 +70,17 @@ const EditorPopup = ({ layoutId, setSelectedNote }) => {
     animate: { opacity: 1 },
     exit: { opacity: 0 },
   };
+
+  const visibilityAnimation = {
+    initial: { opacity: 0, translateY: "-10px" },
+    animate: { opacity: 1, translateY: "0px" },
+    exit: { opacity: 0, translateY: "-10px" },
+  };
+
+  const wrapperRef = useRef(null);
+  useClickOutside(wrapperRef, () => {
+    setDropdown(false);
+  });
 
   return (
     <motion.div
@@ -120,20 +154,64 @@ const EditorPopup = ({ layoutId, setSelectedNote }) => {
         </div>
         <div className="modal-footer">
           <div className="footer-action">
-            <div className="action">
+            <div
+              className="action"
+              onClick={() => {
+                copyNote(note.title, note.content, note.color);
+              }}
+            >
               <FiCopy className="icon" size={18} />
             </div>
-            <div className="action">
+            <div
+              className="action"
+              onClick={() => {
+                setSelectedNote(null);
+                navigate("/");
+                setDeleteTarget(noteKey);
+              }}
+            >
               <FiTrash className="icon" size={18} />
             </div>
-            <div className="action">
+            <div className="action" ref={wrapperRef} onClick={() => setDropdown(!dropdown)}>
               <IoColorPaletteOutline className="icon" size={18} />
-            </div>
-            <div className="action">
-              <IoEllipsisVertical className="icon" size={18} />
+              <AnimatePresence>
+                {dropdown && (
+                  <motion.div
+                    className="color-menu"
+                    variants={visibilityAnimation}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                  >
+                    <div className="edit-colors">
+                      {colors.map((color, index) => (
+                        <button
+                          key={color}
+                          className={`color-dot ${color} ${
+                            color === note.color && "selected-color-outline"
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            editNoteColor(noteKey, color);
+                          }}
+                        ></button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
-          <button className="close-btn">Close</button>
+          <button
+            className="close-btn"
+            onClick={() => {
+              if (updated) saveNote();
+              setSelectedNote(null);
+              navigate("/");
+            }}
+          >
+            Close
+          </button>
         </div>
       </motion.div>
     </motion.div>
