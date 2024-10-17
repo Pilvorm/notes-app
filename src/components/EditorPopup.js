@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { IoEllipsisVertical } from "react-icons/io5";
+import { IoEllipsisVertical, IoColorPaletteOutline } from "react-icons/io5";
 import { IoIosStarOutline, IoIosStar } from "react-icons/io";
+import { FiCopy, FiTrash } from "react-icons/fi";
 import moment from "moment";
 import { editNote, deleteNote } from "../redux/actions";
 import { motion, AnimatePresence } from "framer-motion";
@@ -81,21 +82,25 @@ const EditorPopup = ({ layoutId, setSelectedNote }) => {
             }}
           />
           {starred ? (
-            <IoIosStar
-              size={32}
+            <div
+              className="action"
               onClick={() => {
                 setStarred(!starred);
                 setUpdated(true);
               }}
-            />
+            >
+              <IoIosStar size={28} />
+            </div>
           ) : (
-            <IoIosStarOutline
-              size={32}
+            <div
+              className="action"
               onClick={() => {
                 setStarred(!starred);
                 setUpdated(true);
               }}
-            />
+            >
+              <IoIosStarOutline size={28} />
+            </div>
           )}
         </div>
         <div className="modal-body">
@@ -115,7 +120,18 @@ const EditorPopup = ({ layoutId, setSelectedNote }) => {
         </div>
         <div className="modal-footer">
           <div className="footer-action">
-            <IoEllipsisVertical className="icon" size={18} />
+            <div className="action">
+              <FiCopy className="icon" size={18} />
+            </div>
+            <div className="action">
+              <FiTrash className="icon" size={18} />
+            </div>
+            <div className="action">
+              <IoColorPaletteOutline className="icon" size={18} />
+            </div>
+            <div className="action">
+              <IoEllipsisVertical className="icon" size={18} />
+            </div>
           </div>
           <button className="close-btn">Close</button>
         </div>
