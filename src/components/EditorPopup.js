@@ -151,6 +151,7 @@ const EditorPopup = ({ layoutId, setSelectedNote, setDeleteTarget }) => {
               setUpdated(true);
             }}
           />
+          <p className="edit-date">Edited {moment(note.dateModified).format("MMM DD HH:mm")}</p>
         </div>
         <div className="modal-footer">
           <div className="footer-action">

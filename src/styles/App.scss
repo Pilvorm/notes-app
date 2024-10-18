@@ -274,15 +274,22 @@ main {
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  gap: 16px;
   padding: 28px 18px !important;
   border-radius: 16px;
   font-family: "BreezeSans-Medium";
   transition: box-shadow 0.225s ease-in-out, transform 0.125s ease-in;
 
-  p,
-  .card-title-input {
+  p {
     font-size: 1.6rem;
-    user-select: none !important;
+  }
+  
+  .card-content {
+    font-size: 1.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: "BreezeSans-Regular";
   }
 
   &:hover {
@@ -290,19 +297,6 @@ main {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
       rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
     transition: box-shadow 0.225s ease-in-out, transform 0.125s ease-in;
-  }
-
-  .card-title-input {
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: transparent;
-    resize: none;
-    max-height: 40%;
-
-    &:focus {
-      outline: none;
-    }
   }
 }
 
@@ -406,6 +400,12 @@ main {
 
   .modal-body {
     padding: 0 24px;
+
+    .edit-date {
+      text-align: right;
+      margin-top: 16px !important;
+      font-size: 1.2rem;
+    }
   }
 
   .modal-footer {
@@ -437,7 +437,7 @@ main {
       .edit-colors {
         display: flex;
         gap: 12px;
-        padding: 4px 12px;
+        padding: 0px 12px;
       }
     }
 

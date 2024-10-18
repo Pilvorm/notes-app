@@ -157,8 +157,11 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
               }}
             >
               <div className={`card-body ${notes[key].color}`}>
-                <p className="card-text" layout="position">
+                <p className="card-title" layout="position">
                   {notes[key].title}
+                </p>
+                <p className="card-content">
+                  {notes[key].content}
                 </p>
                 <div className="card-bottom">
                   <p>{moment(notes[key].dateCreated).format("MMM DD, YYYY")}</p>
