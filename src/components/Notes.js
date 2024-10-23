@@ -8,6 +8,7 @@ import { colors, useClickOutside, sortData } from "../helpers/noteHelper";
 import EditorPopup from "./EditorPopup";
 import { createNote, editNote, deleteNote } from "../redux/actions";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 const NoteOptions = ({ note, noteKey }) => {
   const dispatch = useDispatch();
@@ -104,6 +105,8 @@ const NoteOptions = ({ note, noteKey }) => {
 };
 
 const Notes = ({ sortValue, sortDirection, searchQuery }) => {
+  const isTabletWidth = useMediaQuery({ query: "(max-width: 768px)" });
+  const isMobileWidth = useMediaQuery({ query: "(max-width: 640px)" });
   const dispatch = useDispatch();
   const notes = useSelector((state) => state.note);
   const noteKey = sortData(notes, sortValue, sortDirection, searchQuery);
@@ -137,6 +140,23 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
     exit: { opacity: 0, scale: 0.95 },
   };
 
+  const truncate = (string) => {
+    const tabletLimit = 30;
+    const defaultLimit = 60;
+    if (isMobileWidth) {
+      return string.length > defaultLimit
+        ? string.substring(0, defaultLimit - 3) + "..."
+        : string;
+    } else if (isTabletWidth) {
+      return string.length > tabletLimit
+        ? string.substring(0, tabletLimit - 3) + "..."
+        : string;
+    }
+    return string.length > defaultLimit
+      ? string.substring(0, defaultLimit - 3) + "..."
+      : string;
+  };
+
   return noteKey.length ? (
     <>
       <ul className="note-cards">
@@ -160,9 +180,7 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
                 <p className="card-title" layout="position">
                   {notes[key].title}
                 </p>
-                <p className="card-content">
-                  {notes[key].content}
-                </p>
+                <p className="card-content">{truncate(notes[key].content)}</p>
                 <div className="card-bottom">
                   <p>{moment(notes[key].dateCreated).format("MMM DD, YYYY")}</p>
                   <NoteOptions note={notes[key]} noteKey={key} />

@@ -34,13 +34,6 @@ const Sidebar = ({}) => {
   return (
     <nav>
       <p className="mt-5">Denote</p>
-      <motion.button
-        whileTap={{ scale: 0.85 }}
-        className="sidebar-btn home-btn"
-        onClick={() => navigate("/")}
-      >
-        <FiHome size={24} />
-      </motion.button>
       <div className="new-note">
         <motion.button
           whileTap={{ scale: 0.85 }}

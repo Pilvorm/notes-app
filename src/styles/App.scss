@@ -9,6 +9,7 @@ $lime: #e4ef8f;
 $yellow: #fecd00;
 
 $sidebar-width: 128px;
+$sidebar-width-small: 84px;
 
 h1,
 h2,
@@ -155,12 +156,8 @@ nav {
     height: 45px;
   }
 
-  .home-btn {
-    margin-top: 55px;
-  }
-
   .new-note {
-    margin-top: 35px;
+    margin-top: 55px;
   }
 
   .new-note-colors {
@@ -243,10 +240,6 @@ main {
       background-color: transparent;
     }
   }
-
-  // .editor {
-  //   margin-top: 85px;
-  // }
 }
 
 .note-cards {
@@ -283,17 +276,13 @@ main {
   p {
     font-size: 1.6rem;
   }
-  
+
   .card-content {
     font-size: 1.4rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     font-family: "BreezeSans-Regular";
   }
 
   &:hover {
-    // transform: scale(1.0125);
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
       rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
     transition: box-shadow 0.225s ease-in-out, transform 0.125s ease-in;
@@ -476,5 +465,80 @@ main {
   #note-content-editor {
     font-size: 1.6rem;
     font-family: "BreezeSans-Regular";
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  nav {
+    width: $sidebar-width-small;
+
+    p {
+      height: fit-content;
+      font-size: 1.8rem;
+      font-family: "BreezeSans-Medium";
+    }
+
+    .sidebar-btn {
+      width: 35px;
+      height: 35px;
+    }
+  }
+
+  main {
+    margin-left: calc($sidebar-width-small + 28px);
+    margin-right: 28px;
+
+    h1 {
+      font-size: 2.8rem;
+    }
+  }
+
+  .card {
+    width: 220px !important;
+    height: 220px !important;
+    border-radius: 16px !important;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .card {
+    width: 100% !important;
+    height: 180px !important;
+    border-radius: 16px !important;
+  }
+
+  .card-bottom {
+    .note-options {
+      .note-menu {
+        @extend .dropdown-menu;
+        top: 0px;
+        left: -210px;
+        min-width: 125px;
+        z-index: 99;
+      }
+    }
+  
+    .edit-colors {
+      display: flex;
+      gap: 12px;
+      padding: 12px 28px 0px 28px;
+      border-top: 1px solid $line-gray;
+    }
+  }
+
+  #editor-modal {
+    .modal-card {
+      width: 100%;
+    }
+  
+    #note-title-editor {
+      font-size: 2.2rem;
+      font-family: "BreezeSans-Medium";
+    }
+  
+    #note-content-editor {
+      font-size: 1.6rem;
+      font-family: "BreezeSans-Regular";
+    }
   }
 }

@@ -11,8 +11,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
 import useAutosizeInput from "../helpers/autoSizeInput";
 import TextareaAutosize from "react-textarea-autosize";
+import { useMediaQuery } from "react-responsive";
 
 const EditorPopup = ({ layoutId, setSelectedNote, setDeleteTarget }) => {
+  const isTabletWidth = useMediaQuery({ query: "(max-width: 768px)" });
   const dispatch = useDispatch();
   const notes = useSelector((state) => state.note);
   const note = notes[layoutId];
@@ -143,7 +145,7 @@ const EditorPopup = ({ layoutId, setSelectedNote, setDeleteTarget }) => {
             className={`${note.color}`}
             defaultValue={note.content}
             minRows={1}
-            maxRows={20}
+            maxRows={isTabletWidth ? 16 : 20}
             placeholder="Write something here"
             onChange={(e) => {
               setContent(e.target.value);

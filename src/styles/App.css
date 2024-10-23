@@ -141,11 +141,8 @@ nav .sidebar-btn {
   width: 45px;
   height: 45px;
 }
-nav .home-btn {
-  margin-top: 55px;
-}
 nav .new-note {
-  margin-top: 35px;
+  margin-top: 55px;
 }
 nav .new-note-colors {
   margin-top: 40px;
@@ -254,9 +251,6 @@ main .header-settings .sort-direction {
 }
 .card-body .card-content {
   font-size: 1.4rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   font-family: "BreezeSans-Regular";
 }
 .card-body:hover {
@@ -409,4 +403,62 @@ main .header-settings .sort-direction {
 #editor-modal #note-content-editor {
   font-size: 1.6rem;
   font-family: "BreezeSans-Regular";
+}
+
+@media only screen and (max-width: 768px) {
+  nav {
+    width: 84px;
+  }
+  nav p {
+    height: -moz-fit-content;
+    height: fit-content;
+    font-size: 1.8rem;
+    font-family: "BreezeSans-Medium";
+  }
+  nav .sidebar-btn {
+    width: 35px;
+    height: 35px;
+  }
+  main {
+    margin-left: 112px;
+    margin-right: 28px;
+  }
+  main h1 {
+    font-size: 2.8rem;
+  }
+  .card {
+    width: 220px !important;
+    height: 220px !important;
+    border-radius: 16px !important;
+  }
+}
+@media only screen and (max-width: 640px) {
+  .card {
+    width: 100% !important;
+    height: 180px !important;
+    border-radius: 16px !important;
+  }
+  .card-bottom .note-options .note-menu {
+    top: 0px;
+    left: -210px;
+    min-width: 125px;
+    z-index: 99;
+  }
+  .card-bottom .edit-colors {
+    display: flex;
+    gap: 12px;
+    padding: 12px 28px 0px 28px;
+    border-top: 1px solid #e3e9f3;
+  }
+  #editor-modal .modal-card {
+    width: 100%;
+  }
+  #editor-modal #note-title-editor {
+    font-size: 2.2rem;
+    font-family: "BreezeSans-Medium";
+  }
+  #editor-modal #note-content-editor {
+    font-size: 1.6rem;
+    font-family: "BreezeSans-Regular";
+  }
 }/*# sourceMappingURL=App.css.map */
