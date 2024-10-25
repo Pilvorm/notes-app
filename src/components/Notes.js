@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { IoEllipsisVertical } from "react-icons/io5";
+import { IoEllipsisVertical, IoClose } from "react-icons/io5";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import moment from "moment";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,7 +10,7 @@ import { createNote, editNote, deleteNote } from "../redux/actions";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
-const NoteOptions = ({ note, noteKey }) => {
+const NoteOptions = ({ note, noteKey, setDeletedNote }) => {
   const dispatch = useDispatch();
   const [dropdown, setDropdown] = useState(false);
 
@@ -24,13 +24,13 @@ const NoteOptions = ({ note, noteKey }) => {
     );
   };
 
-  const copyNote = (title, content, color) => {
+  const copyNote = (title, content, color, starred) => {
     dispatch(
       createNote({
         title,
         content,
         color,
-        starred: false,
+        starred,
         dateCreated: new Date(),
         dateModified: new Date(),
       })
@@ -70,6 +70,7 @@ const NoteOptions = ({ note, noteKey }) => {
             <button
               onClick={() => {
                 dispatch(deleteNote(noteKey));
+                setDeletedNote(note);
               }}
             >
               Delete note
@@ -78,7 +79,7 @@ const NoteOptions = ({ note, noteKey }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 setDropdown(false);
-                copyNote(note.title, note.content, note.color);
+                copyNote(note.title, note.content, note.color, note.starred);
               }}
             >
               Make a copy
@@ -116,6 +117,7 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
   let { noteID } = useParams();
   const [selectedNote, setSelectedNote] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deletedNote, setDeletedNote] = useState(null);
 
   useEffect(() => {
     const deleteTimer = setTimeout(() => {
@@ -134,10 +136,29 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
     };
   }, [location]);
 
+  const undoDelete = () => {
+    dispatch(
+      createNote({
+        title: deletedNote.title,
+        content: deletedNote.content,
+        color: deletedNote.color,
+        starred: deletedNote.starred,
+        dateCreated: deletedNote.dateCreated,
+        dateModified: deletedNote.dateModified,
+      })
+    );
+  };
+
   const newNoteAnimation = {
     initial: { opacity: 0, scale: 0.95 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.95 },
+  };
+
+  const undoPopupAnimation = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: 10 },
   };
 
   const truncate = (string) => {
@@ -157,54 +178,93 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
       : string;
   };
 
-  return noteKey.length ? (
+  return (
     <>
-      <ul className="note-cards">
-        <AnimatePresence mode="popLayout">
-          {noteKey.map((key) => (
-            <motion.li
-              layout
-              layoutId={key}
-              variants={newNoteAnimation}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              key={key}
-              className={`card ${selectedNote === key ? "selected-note" : ""}`}
-              onClick={() => {
-                setSelectedNote(key);
-                navigate(`/notes/${key}`);
-              }}
-            >
-              <div className={`card-body ${notes[key].color}`}>
-                <p className="card-title" layout="position">
-                  {notes[key].title}
-                </p>
-                <p className="card-content">{truncate(notes[key].content)}</p>
-                <div className="card-bottom">
-                  <p>{moment(notes[key].dateCreated).format("MMM DD, YYYY")}</p>
-                  <NoteOptions note={notes[key]} noteKey={key} />
-                </div>
-              </div>
-            </motion.li>
-          ))}
-        </AnimatePresence>
-      </ul>
+      {noteKey ? (
+        <>
+          <ul className="note-cards">
+            <AnimatePresence mode="popLayout">
+              {noteKey.map((key) => (
+                <motion.li
+                  layout
+                  layoutId={key}
+                  variants={newNoteAnimation}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  key={key}
+                  className={`card ${
+                    selectedNote === key ? "selected-note" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedNote(key);
+                    navigate(`/notes/${key}`);
+                  }}
+                >
+                  <div className={`card-body ${notes[key].color}`}>
+                    <p className="card-title" layout="position">
+                      {notes[key].title}
+                    </p>
+                    <p className="card-content">
+                      {truncate(notes[key].content)}
+                    </p>
+                    <div className="card-bottom">
+                      <p>
+                        {moment(notes[key].dateCreated).format("MMM DD, YYYY")}
+                      </p>
+                      <NoteOptions
+                        note={notes[key]}
+                        noteKey={key}
+                        setDeletedNote={setDeletedNote}
+                      />
+                    </div>
+                  </div>
+                </motion.li>
+              ))}
+            </AnimatePresence>
+          </ul>
+          <AnimatePresence>
+            {selectedNote && (
+              <EditorPopup
+                layoutId={selectedNote}
+                setSelectedNote={setSelectedNote}
+                setDeleteTarget={setDeleteTarget}
+              />
+            )}
+          </AnimatePresence>
+        </>
+      ) : (
+        <div id="empty-notes">
+          <FaRegNoteSticky size={75} />
+          <p>No notes yet</p>
+        </div>
+      )}
       <AnimatePresence>
-        {selectedNote && (
-          <EditorPopup
-            layoutId={selectedNote}
-            setSelectedNote={setSelectedNote}
-            setDeleteTarget={setDeleteTarget}
-          />
+        {deletedNote && (
+          <motion.div
+            layout
+            id="undo-popup"
+            variants={undoPopupAnimation}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <p>Note deleted</p>
+            <div className="undo-actions">
+              <p
+                onClick={() => {
+                  undoDelete();
+                  setDeletedNote(null);
+                }}
+              >
+                Undo
+              </p>
+              <IoClose size={24} onClick={() => setDeletedNote(null)} />
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>
-  ) : (
-    <div id="empty-notes">
-      <FaRegNoteSticky size={75} />
-      <p>No notes yet</p>
-    </div>
   );
 };
 
