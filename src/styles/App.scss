@@ -250,11 +250,13 @@ main {
   padding: 0;
   margin-top: 50px;
   margin-bottom: 50px;
+  z-index: -1;
 }
 
 .selected-note {
   opacity: 0 !important;
   transition: all 0.1s ease-in;
+  z-index: 9;
 }
 
 .card {
@@ -357,10 +359,9 @@ main {
   background-color: rgba(32, 33, 36, 0.6); /* Black w/ opacity */
 
   .modal-card {
-    // background-color: white;
     border-radius: 16px;
     min-width: 585px;
-    min-height: 180px;
+    max-height: 90%;
   }
 
   .action {
@@ -396,6 +397,27 @@ main {
       margin-top: 16px !important;
       font-size: 1.2rem;
     }
+  }
+
+  textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    background-color: transparent;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  #note-title-editor {
+    font-size: 2.2rem;
+    font-family: "BreezeSans-Medium";
+  }
+
+  #note-content-editor {
+    font-size: 1.6rem;
+    font-family: "BreezeSans-Regular";
   }
 
   .modal-footer {
@@ -446,27 +468,6 @@ main {
       }
     }
   }
-
-  textarea {
-    width: 100%;
-    border: none;
-    resize: none;
-    background-color: transparent;
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  #note-title-editor {
-    font-size: 2.2rem;
-    font-family: "BreezeSans-Medium";
-  }
-
-  #note-content-editor {
-    font-size: 1.6rem;
-    font-family: "BreezeSans-Regular";
-  }
 }
 
 #undo-popup {
@@ -505,7 +506,7 @@ main {
         transition: all 0.075s ease-in;
       }
     }
-    
+
     svg {
       cursor: pointer;
     }
@@ -553,7 +554,8 @@ main {
 
   #editor-modal {
     .modal-card {
-      width: 100%;
+      min-width: 0;
+      width: 100% !important;
     }
 
     #note-title-editor {

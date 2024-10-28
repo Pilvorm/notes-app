@@ -222,11 +222,13 @@ main .header-settings .sort-direction {
   padding: 0;
   margin-top: 50px;
   margin-bottom: 50px;
+  z-index: -1;
 }
 
 .selected-note {
   opacity: 0 !important;
   transition: all 0.1s ease-in;
+  z-index: 9;
 }
 
 .card {
@@ -316,7 +318,7 @@ main .header-settings .sort-direction {
 #editor-modal .modal-card {
   border-radius: 16px;
   min-width: 585px;
-  min-height: 180px;
+  max-height: 90%;
 }
 #editor-modal .action {
   padding: 8px;
@@ -345,6 +347,23 @@ main .header-settings .sort-direction {
   text-align: right;
   margin-top: 16px !important;
   font-size: 1.2rem;
+}
+#editor-modal textarea {
+  width: 100%;
+  border: none;
+  resize: none;
+  background-color: transparent;
+}
+#editor-modal textarea:focus {
+  outline: none;
+}
+#editor-modal #note-title-editor {
+  font-size: 2.2rem;
+  font-family: "BreezeSans-Medium";
+}
+#editor-modal #note-content-editor {
+  font-size: 1.6rem;
+  font-family: "BreezeSans-Regular";
 }
 #editor-modal .modal-footer {
   background-color: white;
@@ -386,23 +405,6 @@ main .header-settings .sort-direction {
 #editor-modal .modal-footer .close-btn:hover {
   background-color: rgba(89, 89, 89, 0.1);
   transition: all 0.075s ease-in;
-}
-#editor-modal textarea {
-  width: 100%;
-  border: none;
-  resize: none;
-  background-color: transparent;
-}
-#editor-modal textarea:focus {
-  outline: none;
-}
-#editor-modal #note-title-editor {
-  font-size: 2.2rem;
-  font-family: "BreezeSans-Medium";
-}
-#editor-modal #note-content-editor {
-  font-size: 1.6rem;
-  font-family: "BreezeSans-Regular";
 }
 
 #undo-popup {
@@ -476,7 +478,8 @@ main .header-settings .sort-direction {
     border-radius: 16px !important;
   }
   #editor-modal .modal-card {
-    width: 100%;
+    min-width: 0;
+    width: 100% !important;
   }
   #editor-modal #note-title-editor {
     font-size: 2.2rem;
