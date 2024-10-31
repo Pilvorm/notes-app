@@ -1,4 +1,4 @@
-# Little Lemon Restaurant - [Live Preview](https://notes-app-git-master-pilvorms-projects.vercel.app/)
+# Notes App - [Live Preview](https://notes-app-git-master-pilvorms-projects.vercel.app/)
 A notes app.
 
 ![Notes App](https://github.com/user-attachments/assets/51109e55-ca1c-47ff-8293-30ac696275ba)
