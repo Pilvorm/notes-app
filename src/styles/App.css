@@ -486,6 +486,9 @@ main .header-settings .sort-direction {
     height: 180px !important;
     border-radius: 16px !important;
   }
+  .card-body .card-content {
+    white-space: unset;
+  }
   .card-bottom .note-options .note-menu {
     top: -15px;
     left: -215px;
@@ -507,5 +510,65 @@ main .header-settings .sort-direction {
   #editor-modal #note-content-editor {
     font-size: 1.6rem;
     font-family: "BreezeSans-Regular";
+  }
+}
+@media only screen and (max-width: 480px) {
+  main {
+    margin-left: 98px;
+    margin-right: 14px;
+  }
+  main .header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  main h1 {
+    font-family: "BreezeSans-Medium";
+    font-size: 2.4rem;
+  }
+  main .header-settings {
+    color: #a1a1a1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "BreezeSans-Light";
+  }
+  main .header-settings .settings-menu {
+    top: 45px;
+    right: 0px;
+    min-width: 195px;
+  }
+  main .header-settings .settings-menu .selected {
+    color: #fe9b72 !important;
+  }
+  main .header-settings p {
+    font-size: 1.4rem;
+  }
+  main .header-settings .sort-direction {
+    color: #a1a1a1;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+  }
+  main .header-settings {
+    color: #a1a1a1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "BreezeSans-Light";
+  }
+  main .header-settings .settings-menu {
+    top: 45px;
+    right: 0px;
+    min-width: 195px;
+  }
+  main .header-settings .settings-menu .selected {
+    color: #fe9b72 !important;
+  }
+  .note-cards {
+    margin-top: 25px;
+    margin-bottom: 25px;
   }
 }/*# sourceMappingURL=App.css.map */

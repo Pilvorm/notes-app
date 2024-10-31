@@ -178,11 +178,12 @@ const Notes = ({ sortValue, sortDirection, searchQuery }) => {
   };
 
   const truncate = (string) => {
+    const mobileLimit = 20;
     const tabletLimit = 30;
     const defaultLimit = 60;
     if (isMobileWidth) {
-      return string.length > defaultLimit
-        ? string.substring(0, defaultLimit - 3) + "..."
+      return string.length > mobileLimit
+        ? string.substring(0, mobileLimit - 3) + "..."
         : string;
     } else if (isTabletWidth) {
       return string.length > tabletLimit
