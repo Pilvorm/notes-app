@@ -9,10 +9,13 @@ import EditorPopup from "./EditorPopup";
 import { createNote, editNote, deleteNote } from "../redux/actions";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 const NoteOptions = ({ note, noteKey, setDeletedNote }) => {
   const dispatch = useDispatch();
   const [dropdown, setDropdown] = useState(false);
+  const [offScreen, setOffScreen] = useState(false);
+  const size = useWindowSize();
 
   const editNoteColor = (key, color) => {
     dispatch(
@@ -44,9 +47,19 @@ const NoteOptions = ({ note, noteKey, setDeletedNote }) => {
   };
 
   const wrapperRef = useRef(null);
+  const dropdownRef = useRef(null);
   useClickOutside(wrapperRef, () => {
     setDropdown(false);
   });
+
+  useEffect(() => {
+    if (dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect();
+      if (rect.x + rect.width > size.width) {
+        setOffScreen(true);
+      } else setOffScreen(false);
+    }
+  }, [dropdown]);
 
   return (
     <div
@@ -61,7 +74,10 @@ const NoteOptions = ({ note, noteKey, setDeletedNote }) => {
       <AnimatePresence>
         {dropdown && (
           <motion.div
-            className="note-menu"
+            className={`note-menu ${
+              !offScreen ? "note-menu-default" : "note-menu-alt"
+            }`}
+            ref={dropdownRef}
             variants={visibilityAnimation}
             initial="initial"
             animate="animate"

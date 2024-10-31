@@ -17,6 +17,7 @@ const EditorPopup = ({ layoutId, setSelectedNote, setDeleteTarget }) => {
   const isTabletWidth = useMediaQuery({ query: "(max-width: 768px)" });
   const isMediumHeight = useMediaQuery({ query: "(max-height: 740px)" });
   const isSmallHeight = useMediaQuery({ query: "(max-height: 600px)" });
+  const isXSmallHeight = useMediaQuery({ query: "(max-height: 420px)" });
   const dispatch = useDispatch();
   const notes = useSelector((state) => state.note);
   const note = notes[layoutId];
@@ -147,7 +148,7 @@ const EditorPopup = ({ layoutId, setSelectedNote, setDeleteTarget }) => {
             className={`${note.color}`}
             defaultValue={note.content}
             minRows={1}
-            maxRows={isSmallHeight ? 6 : isMediumHeight ? 10 : 18}
+            maxRows={isXSmallHeight ? 2 : isSmallHeight ? 8 : isMediumHeight ? 14 : 20}
             placeholder="Write something here"
             onChange={(e) => {
               setContent(e.target.value);
